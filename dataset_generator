@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Aug  9 00:37:59 2019
+
+@author: malrawi
+"""
+
+from torch.utils.data import Dataset
+import torch
+import torchvision.transforms as transforms
+
+class ImageDataset(Dataset):
+    def __init__(self, root, pre_tr_model, input_size, no_samples):
+        # input_size is (3, 256, 256) to mimic an RGB image of size 256 by 256
+        # And yes, in Pytorch tensor, (256,256,3) RGB has the shape (3,256, 256)
+        
+        self.pre_tr_model = pre_tr_model 
+        self.no_samples= no_samples
+        self.img_size= input_size
+
+    def __getitem__(self, index):
+        ''' we will have to try different noise generators, or patters, to 
+        see which one works for our case, if any, here I am using randoms 
+        generated from a normal distribution'''
+        img_noise = torch.randn(self.img_size) 
+
+        ''' maybe we need to normalize the gnerated noise, 
+        we have to try a lot of things to make it work     
+        And remember, noise generators usually generate 0 mean unite (1) variance samples,
+        So, normalization might, might help a bit. Tesing will tell '''
+#         transforms.Normalize((0.5, 0.5, 0.5), 
+#                             (0.25, 0.25, 0.25)),
+        ''' now, we generate the lable for the input we have generated'''
+        label_of_noise = self.pre_tr_model(img_noise)
+                
+        return img_noise, label_of_noise
+    
+    def __len__(self):
+        return self.no_samples
