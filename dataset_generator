@@ -25,13 +25,13 @@ class ImageDataset(Dataset):
         generated from a normal distribution'''
         img_noise = torch.randn(self.img_size) 
 
-        ''' maybe we need to normalize the gnerated noise, 
+        ''' maybe we need to normalize the generated noise, 
         we have to try a lot of things to make it work     
         And remember, noise generators usually generate 0 mean unite (1) variance samples,
-        So, normalization might, might help a bit. Tesing will tell '''
+        So, normalization might, might help a bit. Testing will tell '''
 #         transforms.Normalize((0.5, 0.5, 0.5), 
 #                             (0.25, 0.25, 0.25)),
-        ''' now, we generate the lable for the input we have generated'''
+        ''' now, we generate the label for the input we have generated'''
         label_of_noise = self.pre_tr_model(img_noise)
                 
         return img_noise, label_of_noise
